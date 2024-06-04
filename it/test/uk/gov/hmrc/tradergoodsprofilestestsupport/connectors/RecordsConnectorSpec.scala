@@ -54,13 +54,14 @@ class RecordsConnectorSpec
       locked = Some(true),
       toReview = None,
       reviewReason = None,
-      declarable = None
+      declarable = None,
+      updatedDateTime = None
     )
 
     "must send a patch request and return success" in {
 
       wireMockServer.stubFor(
-        patch(urlEqualTo("/test-support/goods-item/patch"))
+        patch(urlEqualTo("/test-support/goods-item"))
           .withRequestBody(equalTo(Json.toJson(payload).toString))
           .willReturn(
             ok()
@@ -73,7 +74,7 @@ class RecordsConnectorSpec
     "must return a failed future when the server returns an error" in {
 
       wireMockServer.stubFor(
-        patch(urlEqualTo("/test-support/patch"))
+        patch(urlEqualTo("/test-support/goods-item"))
           .withRequestBody(equalTo(Json.toJson(payload).toString))
           .willReturn(
             serverError()

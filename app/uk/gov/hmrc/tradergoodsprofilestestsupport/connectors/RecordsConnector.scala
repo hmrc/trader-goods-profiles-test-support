@@ -31,7 +31,7 @@ class RecordsConnector @Inject()(config: Configuration, httpClient: HttpClientV2
                                 (implicit ec: ExecutionContext) {
 
   private val baseUrl: Service = config.get[Service]("microservice.services.trader-goods-profiles-hawk-stub")
-  private def patchUrl = url"$baseUrl/test-support/goods-item/patch"
+  private def patchUrl = url"$baseUrl/test-support/goods-item"
 
   def patch(patch: GoodsItemPatch)(implicit hc: HeaderCarrier): Future[Done] =
     httpClient

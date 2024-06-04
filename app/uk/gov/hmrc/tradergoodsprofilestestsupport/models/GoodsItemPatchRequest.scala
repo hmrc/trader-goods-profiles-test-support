@@ -18,6 +18,8 @@ package uk.gov.hmrc.tradergoodsprofilestestsupport.models
 
 import play.api.libs.json.{Json, OFormat}
 
+import java.time.Instant
+
 final case class GoodsItemPatchRequest(
                                         accreditationStatus: Option[AccreditationStatus],
                                         version: Option[Int],
@@ -25,7 +27,8 @@ final case class GoodsItemPatchRequest(
                                         locked: Option[Boolean],
                                         toReview: Option[Boolean],
                                         reviewReason: Option[String],
-                                        declarable: Option[String]
+                                        declarable: Option[String],
+                                        updatedDateTime: Option[Instant]
                                       )
 
 object GoodsItemPatchRequest {

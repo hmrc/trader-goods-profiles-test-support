@@ -18,6 +18,8 @@ package uk.gov.hmrc.tradergoodsprofilestestsupport.models
 
 import play.api.libs.json.{Json, OFormat}
 
+import java.time.Instant
+
 final case class GoodsItemPatch(
                                  eori: String,
                                  recordId: String,
@@ -27,7 +29,8 @@ final case class GoodsItemPatch(
                                  locked: Option[Boolean],
                                  toReview: Option[Boolean],
                                  reviewReason: Option[String],
-                                 declarable: Option[String]
+                                 declarable: Option[String],
+                                 updatedDateTime: Option[Instant]
                                )
 
 object GoodsItemPatch {
@@ -42,7 +45,8 @@ object GoodsItemPatch {
       locked = patchRequest.locked,
       toReview = patchRequest.toReview,
       reviewReason = patchRequest.reviewReason,
-      declarable = patchRequest.declarable
+      declarable = patchRequest.declarable,
+      updatedDateTime = patchRequest.updatedDateTime
     )
 
   implicit lazy val format: OFormat[GoodsItemPatch] = Json.format

@@ -18,65 +18,116 @@ package uk.gov.hmrc.tradergoodsprofilestestsupport.controllers
 
 import org.apache.pekko.Done
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.{never, times, verify, when}
 import org.scalatest.OptionValues
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar.mock
+import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import play.api.inject.bind
+import play.api.mvc.{BodyParsers, Request, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.tradergoodsprofilestestsupport.connectors.RecordsConnector
+import uk.gov.hmrc.tradergoodsprofilestestsupport.controllers.actions.{AuthAction, AuthenticatedRequest}
 import uk.gov.hmrc.tradergoodsprofilestestsupport.models.GoodsItemPatch
 
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RecordsControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar with OptionValues {
 
-  ".patch" -{
+  ".patch" - {
 
-    "must submit the patch request return OK when given a valid payload" in {
+    "when the user has an enrolment with the eori they are trying to patch" - {
 
-      val mockConnector = mock[RecordsConnector]
+      "must submit the patch request return OK when given a valid payload" in {
 
-      when(mockConnector.patch(any())(any())).thenReturn(Future.successful(Done))
+        val mockConnector = mock[RecordsConnector]
 
-      val payload = Json.obj(
-        "active" -> false,
-        "version" -> 123
-      )
+        when(mockConnector.patch(any())(any())).thenReturn(Future.successful(Done))
 
-      val expectedPatch = GoodsItemPatch(
-        eori = "eori",
-        recordId = "recordId",
-        accreditationStatus = None,
-        version = Some(123),
-        active = Some(false),
-        locked = None,
-        toReview = None,
-        reviewReason = None,
-        declarable = None,
-        updatedDateTime = None
-      )
+        val payload = Json.obj(
+          "active" -> false,
+          "version" -> 123
+        )
 
-      val app =
-        GuiceApplicationBuilder()
-          .overrides(bind[RecordsConnector].toInstance(mockConnector))
-          .build()
+        val expectedPatch = GoodsItemPatch(
+          eori = "eori",
+          recordId = "recordId",
+          accreditationStatus = None,
+          version = Some(123),
+          active = Some(false),
+          locked = None,
+          toReview = None,
+          reviewReason = None,
+          declarable = None,
+          updatedDateTime = None
+        )
 
-      running(app) {
+        val app =
+          GuiceApplicationBuilder()
+            .overrides(
+              bind[RecordsConnector].toInstance(mockConnector),
+              bind[AuthAction].toInstance(new FakeAuthAction)
+            )
+            .build()
 
-        val request =
-          FakeRequest(PATCH, routes.RecordsController.patch("eori", "recordId").url)
-            .withJsonBody(payload)
+        running(app) {
 
-        val result = route(app, request).value
+          val request =
+            FakeRequest(PATCH, routes.RecordsController.patch("eori", "recordId").url)
+              .withJsonBody(payload)
 
-        status(result) mustEqual OK
-        verify(mockConnector, times(1)).patch(eqTo(expectedPatch))(any())
+          val result = route(app, request).value
+
+          status(result) mustEqual OK
+          verify(mockConnector, times(1)).patch(eqTo(expectedPatch))(any())
+        }
+      }
+    }
+
+    "when the user has an enrolment with a different eori to the one they're trying to patch" - {
+
+      "must return Forbidden" in {
+
+        val mockConnector = mock[RecordsConnector]
+
+        val payload = Json.obj(
+          "active" -> false,
+          "version" -> 123
+        )
+
+        val app =
+          GuiceApplicationBuilder()
+            .overrides(
+              bind[RecordsConnector].toInstance(mockConnector),
+              bind[AuthAction].toInstance(new FakeAuthAction)
+            )
+            .build()
+
+        running(app) {
+
+          val request =
+            FakeRequest(PATCH, routes.RecordsController.patch("some other eori", "recordId").url)
+              .withJsonBody(payload)
+
+          val result = route(app, request).value
+
+          status(result) mustEqual FORBIDDEN
+          verify(mockConnector, never).patch(any)(any)
+        }
       }
     }
   }
+}
+
+class FakeAuthAction @Inject() extends AuthAction(mock[AuthConnector], mock[BodyParsers.Default]) {
+
+  override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] =
+    block(AuthenticatedRequest(request, "eori"))
 }

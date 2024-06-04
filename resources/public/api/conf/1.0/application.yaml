@@ -1,49 +1,190 @@
 openapi: "3.0.3"
 
 info:
-  version: 1.0.0
-  title: Hello World
+  version: '1.0'
+  title: Trader Goods Profile test support
+  description: |-
+    Use the TGP test support API to aid testing of the Trader Goods Profile Service (TGP).
+    
+    The [Trader goods profile service guide](/guides/trader-goods-profile-service-guide/) contains a detailed overview of v1.0 of the
+    API.
 
 servers:
   - url: https://test-api.service.hmrc.gov.uk/hello-world
     description: Sandbox
-  - url: https://api.service.hmrc.gov.uk/hello-world
-    description: Production
+
 
 components:
+  schemas:
+    PatchTGPRecordSchema:
+      type: object
+      properties:
+        accreditationStatus:
+          $ref: '#/components/schemas/accreditationStatus'
+        version:
+          $ref: '#/components/schemas/version'
+        active:
+          $ref: '#/components/schemas/active'
+        locked:
+          $ref: '#/components/schemas/locked'
+        toReview:
+          $ref: '#/components/schemas/toReview'
+        reviewReason:
+          $ref: '#/components/schemas/reviewReason'
+        declarable:
+          $ref: '#/components/schemas/declarable'
+        updatedDateTime:
+          $ref: '#/components/schemas/updatedDateTime'
+    recordId:
+      type: string
+      format: uuid
+      example: 8ebb6b04-6ab0-4fe2-ad62-e6389a8a204f
+      description: ID of the record for the TGP Product in the TGP Core database (UUID)
+    eori:
+      type: string
+      pattern: ^[A-Z]{2}\d{12,15}$
+      minLength: 14
+      maxLength: 17
+      example: GB123456789012
+      description: >-
+        The trader's EORI number. The first 2 letters are the country code, like
+        GB or XI, followed by 12 or 15 digits.
+    accreditationStatus:
+      type: string
+      minLength: 1
+      maxLength: 35
+      description: >-
+        Indicates the accreditation status of a record if the trader has
+        requested that HMRC review their commodity code.
+      example: Not Requested
+      enum:
+        - Not Requested
+        - Requested
+        - In progress
+        - Information Requested
+        - Withdrawn
+        - Approved
+        - Rejected
+    version:
+      type: integer
+      format: int64
+      description: Version of the TGP record.
+      example: 1
+    active:
+      type: boolean
+      example: true
+      description: Status of the TGP record.
+    toReview:
+      type: boolean
+      example: false
+      description: The state of the record and if the trader needs to review it.
+    reviewReason:
+      type: string
+      minLength: 1
+      maxLength: 512
+      example: Commodity code changed
+      description: >-
+        Commodity code expiry: The commodity code has expired. You'll need to
+        change the commodity code and categorise the goods.
+
+
+        Measures change: The restrictions have changed or there may be new
+        restrictions. You need to categorise the record.
+    declarable:
+      type: string
+      minLength: 1
+      maxLength: 100
+      example: IMMI declarable
+      description: Status of TGP record for H8 declarations.
+      enum:
+        - IMMI ready
+        - not ready for IMMI
+        - not ready for use
+    locked:
+      type: boolean
+      example: false
+      description: Whether the record is locked for updating due to the accreditationStatus
+    updatedDateTime:
+      type: string
+      format: date-time
+      pattern: ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$
+      example: 2023-01-01T00:00:00Z
+      description: Timestamp when the record was last updated.
   parameters:
-    acceptHeader:
-      name: Accept
+    Content-Type:
+      name: Content-Type
       in: header
+      description: Specifies the format of the request body, which must be JSON.
+      required: true
       schema:
         type: string
-        enum: [
-          "application/vnd.hmrc.1.0+json",
-          "application/vnd.hmrc.1.0+xml"
-        ]
+        example: application/json
+    Authorization:
+      name: Authorization
+      in: header
+      description: An OAuth 2.0 Bearer Token.
+      schema:
+        type: string
+        example: Bearer 59fc92c1cdf0b8ef1f138a702effdbd2
       required: true
+    eoriParam:
+      in: path
+      name: eori
+      required: true
+      schema:
+        $ref: '#/components/schemas/eori'
+      description: >-
+        The traders EORI number. The first 2 letters are the country code, like
+        GB or XI, followed by 12 or 15 digits.
+    recordParam:
+      in: path
+      name: recordId
+      required: true
+      schema:
+        $ref: '#/components/schemas/recordId'
+      description: ID of the record for the TGP Product in the TGP Core database (UUID)
 
+  securitySchemes:
+    userRestricted:
+      type: oauth2
+      description: >-
+        HMRC supports OAuth 2.0 for authenticating user restricted API requests
+        using an OAuth 2.0 Bearer Token in the AUTHORIZATION header. See
+        https://developer.service.hmrc.gov.uk/api-documentation/docs/authorisation/user-restricted-endpoints
+        for details.
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.service.hmrc.gov.uk/oauth/authorize
+          tokenUrl: https://api.service.hmrc.gov.uk/oauth/token
+          refreshUrl: https://api.service.hmrc.gov.uk/oauth/refresh
+          scopes:
+            trader-goods-profiles-test-support: Access all aspects of TGP test support API
 paths:
-  /hello-world:
-    get:
-      summary: Placeholder hello world endpoint
+  /customs/traders/goods-profiles-test-support/profiles/{eori}/record/{recordId}:
+    patch:
+      summary: Patch an existing goods record
       description: |
-        An endpoint that returns "Hello world"
+        Patch an existing goods record, updating any fields supplied in the payload and leaving other fields unchanged.
       tags:
-        - trader-goods-profiles-test-support
+        - Goods records
       parameters:
-        - $ref: '#/components/parameters/acceptHeader'
+        - $ref: '#/components/parameters/Content-Type'
+        - $ref: '#/components/parameters/Authorization'
+        - $ref: '#/components/parameters/eoriParam'
+        - $ref: '#/components/parameters/recordParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchTGPRecordSchema'
+        required: true
       responses:
-        200:
-          description: "OK Response"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-              example:
-                "Hello world"
+        '200':
+          description: TGP record was successfully patched
+        '403':
+          description: Forbidden
+        '404':
+          description: No record with the supplied record Id was found for this EORI number
       security:
-        - {}
+        - userRestricted:
+            - trader-goods-profiles-test-support

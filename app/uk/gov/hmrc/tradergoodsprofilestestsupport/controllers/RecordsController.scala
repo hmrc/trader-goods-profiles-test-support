@@ -19,20 +19,26 @@ package uk.gov.hmrc.tradergoodsprofilestestsupport.controllers
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendBaseController
 import uk.gov.hmrc.tradergoodsprofilestestsupport.connectors.RecordsConnector
+import uk.gov.hmrc.tradergoodsprofilestestsupport.controllers.actions.AuthAction
 import uk.gov.hmrc.tradergoodsprofilestestsupport.models.{GoodsItemPatch, GoodsItemPatchRequest}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class RecordsController @Inject()(
                                    override val controllerComponents: ControllerComponents,
-                                   connector: RecordsConnector
+                                   connector: RecordsConnector,
+                                   authenticate: AuthAction
                                  )(implicit ec: ExecutionContext) extends BackendBaseController {
 
-  def patch(eori: String, recordId: String): Action[GoodsItemPatchRequest] = Action(parse.json[GoodsItemPatchRequest]).async { implicit request =>
-    val patch = GoodsItemPatch.fromPatchRequest(eori, recordId, request.body)
+  def patch(eori: String, recordId: String): Action[GoodsItemPatchRequest] = authenticate(parse.json[GoodsItemPatchRequest]).async { implicit request =>
+    if (request.eori == eori) {
+      val patch = GoodsItemPatch.fromPatchRequest(eori, recordId, request.body)
 
-    connector.patch(patch)
-      .map(_ => Ok)
+      connector.patch(patch)
+        .map(_ => Ok)
+    } else {
+      Future.successful(Forbidden)
+    }
   }
 }

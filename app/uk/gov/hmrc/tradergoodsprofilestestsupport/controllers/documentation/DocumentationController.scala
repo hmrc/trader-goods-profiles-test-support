@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tradergoodsprofilestestsupport.controllers
+package uk.gov.hmrc.tradergoodsprofilestestsupport.controllers.documentation
 
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+import controllers.Assets
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
+
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.Future
 
-@Singleton()
-class MicroserviceHelloWorldController @Inject()(cc: ControllerComponents)
-    extends BackendController(cc) {
+@Singleton
+class DocumentationController @Inject() (assets: Assets, cc: ControllerComponents) extends BackendController(cc) {
 
-  def hello(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Hello world"))
+  def definition(): Action[AnyContent] = {
+    assets.at("/public/api", "definition.json")
+  }
+
+  def specification(version: String, file: String): Action[AnyContent] = {
+    assets.at(s"/public/api/conf/$version", file)
   }
 }

@@ -16,6 +16,7 @@ lazy val microservice = Project("trader-goods-profiles-test-support", file("."))
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",
   )
+  .settings(PlayKeys.playDefaultPort := 10907)
 
 lazy val it = project
   .enablePlugins(PlayScala)

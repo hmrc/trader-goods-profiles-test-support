@@ -1,4 +1,7 @@
 # Add all the application routes to the app.routes file
-->         /                          app.Routes
+
+PATCH        /profiles/:eori/records/:recordId             uk.gov.hmrc.tradergoodsprofilestestsupport.controllers.RecordsController.patch(eori: String, recordId: String)
+
 ->         /                          health.Routes
 ->         /                          definition.Routes
+

@@ -29,7 +29,7 @@ final case class GoodsItemPatch(
                                  locked: Option[Boolean],
                                  toReview: Option[Boolean],
                                  reviewReason: Option[String],
-                                 declarable: Option[String],
+                                 declarable: Option[Declarable],
                                  updatedDateTime: Option[Instant]
                                )
 

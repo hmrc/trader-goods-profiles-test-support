@@ -54,7 +54,6 @@ class RecordsConnectorSpec
       locked = Some(true),
       toReview = None,
       reviewReason = None,
-      declarable = None,
       updatedDateTime = None
     )
 

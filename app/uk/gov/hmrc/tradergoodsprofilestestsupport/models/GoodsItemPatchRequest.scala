@@ -27,7 +27,6 @@ final case class GoodsItemPatchRequest(
                                         locked: Option[Boolean],
                                         toReview: Option[Boolean],
                                         reviewReason: Option[String],
-                                        declarable: Option[String],
                                         updatedDateTime: Option[Instant]
                                       )
 

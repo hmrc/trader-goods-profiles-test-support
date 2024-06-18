@@ -65,7 +65,6 @@ class RecordsControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar 
           locked = None,
           toReview = None,
           reviewReason = None,
-          declarable = None,
           updatedDateTime = None
         )
 

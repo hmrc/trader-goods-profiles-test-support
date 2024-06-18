@@ -31,8 +31,6 @@ components:
           $ref: '#/components/schemas/toReview'
         reviewReason:
           $ref: '#/components/schemas/reviewReason'
-        declarable:
-          $ref: '#/components/schemas/declarable'
         updatedDateTime:
           $ref: '#/components/schemas/updatedDateTime'
     recordId:
@@ -90,16 +88,6 @@ components:
 
         Measures change: The restrictions have changed or there may be new
         restrictions. You need to categorise the record.
-    declarable:
-      type: string
-      minLength: 1
-      maxLength: 100
-      example: IMMI ready
-      description: Status of TGP record for H8 declarations.
-      enum:
-        - IMMI ready
-        - Not ready for IMMI
-        - Not Ready For Use
     locked:
       type: boolean
       example: false

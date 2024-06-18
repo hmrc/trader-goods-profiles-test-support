@@ -29,7 +29,6 @@ final case class GoodsItemPatch(
                                  locked: Option[Boolean],
                                  toReview: Option[Boolean],
                                  reviewReason: Option[String],
-                                 declarable: Option[Declarable],
                                  updatedDateTime: Option[Instant]
                                )
 
@@ -45,7 +44,6 @@ object GoodsItemPatch {
       locked = patchRequest.locked,
       toReview = patchRequest.toReview,
       reviewReason = patchRequest.reviewReason,
-      declarable = patchRequest.declarable,
       updatedDateTime = patchRequest.updatedDateTime
     )
 

@@ -1,7 +1,9 @@
 
-# trader-goods-profiles-test-support
+# Trader Goods Profiles Test Support
 
-This is a placeholder README.md for a new repository
+This service is a public-facing API to aid testing of the [Trader Goods Profiles API](https://github.com/hmrc/trader-goods-profiles).  It allows users to alter certain fields on Goods records stored in the [Trader Goods Profiles HAWK Stub](https://github.com/hmrc/trader-goods-profiles-hawk-stub), to simulate scenarios that cannot be performed via the TGP API.
+
+
 
 ### License
 

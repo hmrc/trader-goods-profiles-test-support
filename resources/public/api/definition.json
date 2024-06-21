@@ -1,9 +1,9 @@
 {
   "scopes": [
     {
-      "key": "trader-goods-profiles",
-      "name": "Trader Goods Profiles",
-      "description": "Allow full access to the Trader Goods Profiles public API"
+      "key": "trader-goods-profiles-test-support",
+      "name": "Trader Goods Profiles Test Support",
+      "description": "Allow full access to the Trader Goods Profiles Test Support public API"
     }
   ],
   "api": {

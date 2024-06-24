@@ -1,11 +1,5 @@
 {
-  "scopes": [
-    {
-      "key": "trader-goods-profiles-test-support",
-      "name": "Trader Goods Profiles Test Support",
-      "description": "Allow full access to the Trader Goods Profiles Test Support public API"
-    }
-  ],
+  "scopes": [],
   "api": {
     "name": "Trader Goods Profiles Test Support",
     "description": "An API to support testing the Trader Goods Profiles service",

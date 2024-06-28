@@ -19,8 +19,9 @@ package uk.gov.hmrc.tradergoodsprofilestestsupport.connectors
 import org.apache.pekko.Done
 import play.api.Configuration
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
 import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.tradergoodsprofilestestsupport.config.Service
 import uk.gov.hmrc.tradergoodsprofilestestsupport.models.GoodsItemPatch
 
@@ -38,5 +39,11 @@ class RecordsConnector @Inject()(config: Configuration, httpClient: HttpClientV2
       .patch(patchUrl)
       .withBody(Json.toJson(patch))
       .execute[HttpResponse]
-      .map(_ => Done)
+      .flatMap { response =>
+        if (response.status == 200) {
+          Future.successful(Done)
+        } else {
+          Future.failed(UpstreamErrorResponse("Unexpected response from downstream service", response.status))
+        }
+      }
 }

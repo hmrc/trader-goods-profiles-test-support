@@ -148,7 +148,7 @@ components:
           scopes:
             trader-goods-profiles-test-support: Access all aspects of TGP test support API
 paths:
-  /customs/traders/goods-profiles-test-support/profiles/{eori}/record/{recordId}:
+  /customs/traders/goods-profiles-test-support/profiles/{eori}/records/{recordId}:
     patch:
       summary: Patch an existing goods record
       description: |

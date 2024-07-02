@@ -42,7 +42,7 @@ extends ActionBuilder[AuthenticatedRequest, AnyContent]
     val enrolmentKey  = "HMRC-CUS-ORG"
     val identifierKey = "EORINumber"
 
-    authorised(AffinityGroup.Individual or AffinityGroup.Organisation)
+    authorised((AffinityGroup.Individual or AffinityGroup.Organisation) and Enrolment(enrolmentKey))
       .retrieve(Retrievals.authorisedEnrolments) {
         enrolments => {
           for {

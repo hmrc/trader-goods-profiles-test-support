@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.tradergoodsprofilestestsupport.controllers.actions
 
+import play.api.Logging
 import play.api.mvc.Results.Forbidden
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
@@ -32,7 +33,7 @@ class AuthAction @Inject()(
                           )(implicit val executionContext: ExecutionContext)
 extends ActionBuilder[AuthenticatedRequest, AnyContent]
   with ActionFunction[Request, AuthenticatedRequest]
-  with AuthorisedFunctions {
+  with AuthorisedFunctions with Logging {
 
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
 
@@ -48,7 +49,10 @@ extends ActionBuilder[AuthenticatedRequest, AnyContent]
             enrolment <- enrolments.getEnrolment(enrolmentKey)
             eori      <- enrolment.getIdentifier(identifierKey)
           } yield block(AuthenticatedRequest(request, eori.value))
-        }.getOrElse(Future.successful(Forbidden))
+        }.getOrElse {
+          logger.warn("User had no CDS enrolment")
+          Future.successful(Forbidden)
+        }
       }
   }
 }

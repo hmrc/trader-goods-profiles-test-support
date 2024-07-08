@@ -25,7 +25,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.test.WireMockSupport
-import uk.gov.hmrc.tradergoodsprofilestestsupport.models.GoodsItemPatch
+import uk.gov.hmrc.tradergoodsprofilestestsupport.models.{AdviceStatus, Declarable, GoodsItemPatch}
 
 class RecordsConnectorSpec
   extends AnyFreeSpec
@@ -48,11 +48,12 @@ class RecordsConnectorSpec
     val payload = GoodsItemPatch(
       eori = "eori",
       recordId = "123",
-      accreditationStatus = None,
+      accreditationStatus = Some(AdviceStatus.Requested),
       version = Some(1),
       active = Some(false),
       locked = Some(true),
       toReview = None,
+      declarable = Some(Declarable.ImmiReady),
       reviewReason = None,
       updatedDateTime = None
     )

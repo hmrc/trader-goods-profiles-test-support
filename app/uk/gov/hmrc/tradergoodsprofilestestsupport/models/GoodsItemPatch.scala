@@ -23,11 +23,12 @@ import java.time.Instant
 final case class GoodsItemPatch(
                                  eori: String,
                                  recordId: String,
-                                 accreditationStatus: Option[AccreditationStatus],
+                                 accreditationStatus: Option[AdviceStatus],
                                  version: Option[Int],
                                  active: Option[Boolean],
                                  locked: Option[Boolean],
                                  toReview: Option[Boolean],
+                                 declarable: Option[Declarable],
                                  reviewReason: Option[String],
                                  updatedDateTime: Option[Instant]
                                )
@@ -38,11 +39,12 @@ object GoodsItemPatch {
     GoodsItemPatch(
       eori = eori,
       recordId = recordId,
-      accreditationStatus = patchRequest.accreditationStatus,
+      accreditationStatus = patchRequest.adviceStatus,
       version = patchRequest.version,
       active = patchRequest.active,
       locked = patchRequest.locked,
       toReview = patchRequest.toReview,
+      declarable = patchRequest.declarable,
       reviewReason = patchRequest.reviewReason,
       updatedDateTime = patchRequest.updatedDateTime
     )

@@ -55,7 +55,7 @@ class RecordsControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar 
           "active" -> false,
           "version" -> 123,
           "adviceStatus" -> "Requested",
-          "declarable" -> "not ready for IMMI"
+          "declarable" -> "Not Ready For IMMI"
         )
 
         val expectedPatch = GoodsItemPatch(

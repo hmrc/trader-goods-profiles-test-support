@@ -78,7 +78,7 @@ components:
       type: string
       minLength: 1
       maxLength: 100
-      example: IMMI Ready
+      example: Not Ready For Use
       description: Status of TGP record for H8 declarations.
       enum:
         - IMMI Ready

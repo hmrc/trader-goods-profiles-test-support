@@ -10,7 +10,7 @@ info:
     API.
 
 servers:
-  - url: https://test-api.service.hmrc.gov.uk/hello-world
+  - url: https://test-api.service.hmrc.gov.uk
     description: Sandbox
 
 
@@ -19,8 +19,8 @@ components:
     PatchTGPRecordSchema:
       type: object
       properties:
-        accreditationStatus:
-          $ref: '#/components/schemas/accreditationStatus'
+        adviceStatus:
+          $ref: '#/components/schemas/adviceStatus'
         version:
           $ref: '#/components/schemas/version'
         active:
@@ -29,6 +29,8 @@ components:
           $ref: '#/components/schemas/locked'
         toReview:
           $ref: '#/components/schemas/toReview'
+        declarable:
+          $ref: '#/components/schemas/declarable'
         reviewReason:
           $ref: '#/components/schemas/reviewReason'
         updatedDateTime:
@@ -47,7 +49,7 @@ components:
       description: >-
         The trader's EORI number. The first 2 letters are the country code, like
         GB or XI, followed by 12 or 15 digits.
-    accreditationStatus:
+    adviceStatus:
       type: string
       minLength: 1
       maxLength: 35
@@ -72,6 +74,16 @@ components:
       type: boolean
       example: true
       description: Status of the TGP record.
+    declarable:
+      type: string
+      minLength: 1
+      maxLength: 100
+      example: IMMI declarable
+      description: Status of TGP record for H8 declarations.
+      enum:
+        - IMMI ready
+        - not ready for IMMI
+        - not ready for use
     toReview:
       type: boolean
       example: false
@@ -91,7 +103,7 @@ components:
     locked:
       type: boolean
       example: false
-      description: Whether the record is locked for updating due to the accreditationStatus
+      description: Whether the record is locked for updating due to the adviceStatus
     updatedDateTime:
       type: string
       format: date-time

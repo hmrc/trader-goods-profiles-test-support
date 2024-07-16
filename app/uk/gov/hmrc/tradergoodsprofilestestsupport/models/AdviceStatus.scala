@@ -29,6 +29,6 @@ object AdviceStatus extends PlayEnum[AdviceStatus] {
   case object InProgress extends AdviceStatus("In progress")
   case object InformationRequested extends AdviceStatus("Information Requested")
   case object Withdrawn extends AdviceStatus("Withdrawn")
-  case object Approved extends AdviceStatus("Approved")
-  case object Rejected extends AdviceStatus("Rejected")
+  case object AdviceProvided extends AdviceStatus("Advice Provided")
+  case object AdviceNotProvided extends AdviceStatus("Advice not provided")
 }

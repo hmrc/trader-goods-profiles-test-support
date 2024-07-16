@@ -33,7 +33,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.tradergoodsprofilestestsupport.connectors.RecordsConnector
 import uk.gov.hmrc.tradergoodsprofilestestsupport.controllers.actions.{AuthAction, AuthenticatedRequest}
-import uk.gov.hmrc.tradergoodsprofilestestsupport.models.{AdviceStatus, Declarable, GoodsItemPatch}
+import uk.gov.hmrc.tradergoodsprofilestestsupport.models.{AccreditationStatus, AdviceStatus, Declarable, GoodsItemPatch}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -54,14 +54,14 @@ class RecordsControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar 
         val payload = Json.obj(
           "active" -> false,
           "version" -> 123,
-          "adviceStatus" -> "Requested",
+          "adviceStatus" -> "Advice Provided",
           "declarable" -> "Not Ready For IMMI"
         )
 
         val expectedPatch = GoodsItemPatch(
           eori = "eori",
           recordId = "recordId",
-          accreditationStatus = Some(AdviceStatus.Requested),
+          accreditationStatus = Some(AccreditationStatus.Approved),
           version = Some(123),
           active = Some(false),
           locked = None,

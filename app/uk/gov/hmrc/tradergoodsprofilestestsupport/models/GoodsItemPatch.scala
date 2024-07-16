@@ -23,7 +23,7 @@ import java.time.Instant
 final case class GoodsItemPatch(
                                  eori: String,
                                  recordId: String,
-                                 accreditationStatus: Option[AdviceStatus],
+                                 accreditationStatus: Option[AccreditationStatus],
                                  version: Option[Int],
                                  active: Option[Boolean],
                                  locked: Option[Boolean],
@@ -39,7 +39,7 @@ object GoodsItemPatch {
     GoodsItemPatch(
       eori = eori,
       recordId = recordId,
-      accreditationStatus = patchRequest.adviceStatus,
+      accreditationStatus = patchRequest.adviceStatus.map(adviceStatus => translateAdviceStatus(adviceStatus)),
       version = patchRequest.version,
       active = patchRequest.active,
       locked = patchRequest.locked,
@@ -48,6 +48,13 @@ object GoodsItemPatch {
       reviewReason = patchRequest.reviewReason,
       updatedDateTime = patchRequest.updatedDateTime
     )
+
+  private def translateAdviceStatus(adviceStatus: AdviceStatus): AccreditationStatus =
+    adviceStatus match {
+      case AdviceStatus.AdviceProvided => AccreditationStatus.Approved
+      case AdviceStatus.AdviceNotProvided => AccreditationStatus.Rejected
+      case _                            => AccreditationStatus.withName(adviceStatus.entryName)
+    }
 
   implicit lazy val format: OFormat[GoodsItemPatch] = Json.format
 }

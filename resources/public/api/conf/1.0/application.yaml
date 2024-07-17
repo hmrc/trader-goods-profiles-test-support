@@ -54,7 +54,7 @@ components:
       minLength: 1
       maxLength: 35
       description: >-
-        Indicates the accreditation status of a record if the trader has
+        Indicates the advice status of a record if the trader has
         requested that HMRC review their commodity code.
       example: Not Requested
       enum:
@@ -63,8 +63,8 @@ components:
         - In progress
         - Information Requested
         - Withdrawn
-        - Approved
-        - Rejected
+        - Advice Provided
+        - Advice not provided
     version:
       type: integer
       format: int64

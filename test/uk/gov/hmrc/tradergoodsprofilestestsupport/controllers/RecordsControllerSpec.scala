@@ -91,6 +91,53 @@ class RecordsControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar 
           verify(mockConnector, times(1)).patch(eqTo(expectedPatch))(any())
         }
       }
+
+      "must submit the patch request return OK when given a valid payload for Request advice withdrawn" in {
+
+        val mockConnector = mock[RecordsConnector]
+
+        when(mockConnector.patch(any())(any())).thenReturn(Future.successful(Done))
+
+        val payload = Json.obj(
+          "active" -> false,
+          "version" -> 123,
+          "adviceStatus" -> "Advice request withdrawn",
+          "declarable" -> "Not Ready For IMMI"
+        )
+
+        val expectedPatch = GoodsItemPatch(
+          eori = "eori",
+          recordId = "recordId",
+          accreditationStatus = Some(AccreditationStatus.Withdrawn),
+          version = Some(123),
+          active = Some(false),
+          locked = None,
+          toReview = None,
+          declarable = Some(Declarable.ImmiNotReady),
+          reviewReason = None,
+          updatedDateTime = None
+        )
+
+        val app =
+          GuiceApplicationBuilder()
+            .overrides(
+              bind[RecordsConnector].toInstance(mockConnector),
+              bind[AuthAction].toInstance(new FakeAuthAction)
+            )
+            .build()
+
+        running(app) {
+
+          val request =
+            FakeRequest(PATCH, routes.RecordsController.patch("eori", "recordId").url)
+              .withJsonBody(payload)
+
+          val result = route(app, request).value
+
+          status(result) mustEqual OK
+          verify(mockConnector, times(1)).patch(eqTo(expectedPatch))(any())
+        }
+      }
     }
 
     "when the user has an enrolment with a different eori to the one they're trying to patch" - {

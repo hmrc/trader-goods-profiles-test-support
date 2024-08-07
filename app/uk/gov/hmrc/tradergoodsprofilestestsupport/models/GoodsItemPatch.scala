@@ -53,6 +53,7 @@ object GoodsItemPatch {
     adviceStatus match {
       case AdviceStatus.AdviceProvided => AccreditationStatus.Approved
       case AdviceStatus.AdviceNotProvided => AccreditationStatus.Rejected
+      case AdviceStatus.AdviceRequestWithdrawn => AccreditationStatus.Withdrawn
       case _                            => AccreditationStatus.withName(adviceStatus.entryName)
     }
 

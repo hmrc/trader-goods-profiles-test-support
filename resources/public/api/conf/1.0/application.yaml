@@ -62,7 +62,7 @@ components:
         - Requested
         - In progress
         - Information Requested
-        - Withdrawn
+        - Advice request withdrawn
         - Advice Provided
         - Advice not provided
     version:

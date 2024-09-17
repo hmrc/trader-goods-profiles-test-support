@@ -25,7 +25,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.test.WireMockSupport
-import uk.gov.hmrc.tradergoodsprofilestestsupport.models.{AccreditationStatus, AdviceStatus, Declarable, GoodsItemPatch}
+import uk.gov.hmrc.tradergoodsprofilestestsupport.models.{AccreditationStatus, Declarable, GoodsItemPatch, ReviewReason}
 
 class RecordsConnectorSpec
   extends AnyFreeSpec
@@ -54,7 +54,7 @@ class RecordsConnectorSpec
       locked = Some(true),
       toReview = None,
       declarable = Some(Declarable.ImmiReady),
-      reviewReason = None,
+      reviewReason = Some(ReviewReason.Mismatch),
       updatedDateTime = None
     )
 

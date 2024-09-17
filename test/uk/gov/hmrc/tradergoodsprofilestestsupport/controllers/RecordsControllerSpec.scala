@@ -33,7 +33,7 @@ import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.tradergoodsprofilestestsupport.connectors.RecordsConnector
 import uk.gov.hmrc.tradergoodsprofilestestsupport.controllers.actions.{AuthAction, AuthenticatedRequest}
-import uk.gov.hmrc.tradergoodsprofilestestsupport.models.{AccreditationStatus, AdviceStatus, Declarable, GoodsItemPatch}
+import uk.gov.hmrc.tradergoodsprofilestestsupport.models.{AccreditationStatus, Declarable, GoodsItemPatch, ReviewReason}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -115,6 +115,54 @@ class RecordsControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar 
           toReview = None,
           declarable = Some(Declarable.ImmiNotReady),
           reviewReason = None,
+          updatedDateTime = None
+        )
+
+        val app =
+          GuiceApplicationBuilder()
+            .overrides(
+              bind[RecordsConnector].toInstance(mockConnector),
+              bind[AuthAction].toInstance(new FakeAuthAction)
+            )
+            .build()
+
+        running(app) {
+
+          val request =
+            FakeRequest(PATCH, routes.RecordsController.patch("eori", "recordId").url)
+              .withJsonBody(payload)
+
+          val result = route(app, request).value
+
+          status(result) mustEqual OK
+          verify(mockConnector, times(1)).patch(eqTo(expectedPatch))(any())
+        }
+      }
+
+      "must submit the patch request return OK when given a valid payload for review reason" in {
+
+        val mockConnector = mock[RecordsConnector]
+
+        when(mockConnector.patch(any())(any())).thenReturn(Future.successful(Done))
+
+        val payload = Json.obj(
+          "active" -> false,
+          "version" -> 123,
+          "adviceStatus" -> "Advice request withdrawn",
+          "declarable" -> "Not Ready For IMMI",
+          "reviewReason" -> "commodity"
+        )
+
+        val expectedPatch = GoodsItemPatch(
+          eori = "eori",
+          recordId = "recordId",
+          accreditationStatus = Some(AccreditationStatus.Withdrawn),
+          version = Some(123),
+          active = Some(false),
+          locked = None,
+          toReview = None,
+          declarable = Some(Declarable.ImmiNotReady),
+          reviewReason = Some(ReviewReason.Commodity),
           updatedDateTime = None
         )
 

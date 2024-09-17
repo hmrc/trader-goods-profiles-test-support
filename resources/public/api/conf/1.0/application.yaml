@@ -92,14 +92,27 @@ components:
       type: string
       minLength: 1
       maxLength: 512
-      example: The commodity code has expired. You'll need to change the commodity code and categorise the goods.
+      example: commodity
       description: >-
-        Commodity code expiry: The commodity code has expired. You'll need to
-        change the commodity code and categorise the goods.
+        commodity - The commodity code has expired. You'll need to change the commodity code and categorise the goods.
 
 
-        Measures change: The restrictions have changed or there may be new
-        restrictions. You need to categorise the record.
+        measure - The commodity code or restrictions have changed. You'll need to categorise the record.
+
+
+        unclear - HMRC have reviewed the record. The goods description is unclear. If you want to use this record on an IMMI, you'll need to amend the goods description.
+
+
+        inadequate - HMRC have reviewed this record. The goods description does not have enough detail. If you want to use this record on an IMMI, you'll need to amend the goods description.
+
+
+        mismatch - HMRC have reviewed this record. The commodity code and goods description do not match. If you want to use this record on an IMMI, you'll need to amend the commodity code and the goods description.
+      enum:
+        - commodity
+        - measure
+        - unclear
+        - inadequate
+        - mismatch
     locked:
       type: boolean
       example: false

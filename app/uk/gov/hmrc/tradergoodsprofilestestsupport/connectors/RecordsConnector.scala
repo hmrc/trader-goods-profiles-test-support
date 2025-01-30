@@ -27,6 +27,7 @@ import uk.gov.hmrc.tradergoodsprofilestestsupport.models.GoodsItemPatch
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
 class RecordsConnector @Inject()(config: Configuration, httpClient: HttpClientV2)
                                 (implicit ec: ExecutionContext) {

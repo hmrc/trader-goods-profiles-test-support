@@ -11,7 +11,6 @@ lazy val microservice = Project("trader-goods-profiles-test-support", file("."))
     // suppress warnings in generated routes files
     scalacOptions += "-Wconf:src=routes/.*:s",
   )
-  .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings: _*)
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources",

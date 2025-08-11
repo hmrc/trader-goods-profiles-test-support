@@ -95,7 +95,10 @@ components:
       example: commodity
       description: >-
         commodity - The commodity code has expired. You'll need to change the commodity code and categorise the goods.
-
+        
+        
+        country - The country of origin is not valid. You'll need to change the country of origin and categorise the record.
+        
 
         measure - The commodity code or restrictions have changed. You'll need to categorise the record.
 
@@ -109,6 +112,7 @@ components:
         mismatch - HMRC have reviewed this record. The commodity code and goods description do not match. If you want to use this record on an IMMI, you'll need to amend the commodity code and the goods description.
       enum:
         - commodity
+        - country
         - measure
         - unclear
         - inadequate

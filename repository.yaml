@@ -1,3 +1,5 @@
+digital-service: TGP / Trader Goods Profile
+description: Public facing API to aid testing of the Trader Goods Profiles API. It allows users to alter certain fields on Goods records stored in the Trader Goods Profiles HAWK Stub, to simulate scenarios that cannot be performed via the TGP API.
 repoVisibility: public_0C3F0CE3E6E6448FAD341E7BFA50FCD333E06A20CFF05FCACE61154DDBBADF71
 type: service
 service-type: backend

@@ -29,11 +29,10 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 
-class RecordsConnector @Inject()(config: Configuration, httpClient: HttpClientV2)
-                                (implicit ec: ExecutionContext) {
+class RecordsConnector @Inject() (config: Configuration, httpClient: HttpClientV2)(implicit ec: ExecutionContext) {
 
   private val baseUrl: Service = config.get[Service]("microservice.services.trader-goods-profiles-hawk-stub")
-  private def patchUrl = url"$baseUrl/test-support/goods-item"
+  private def patchUrl         = url"$baseUrl/test-support/goods-item"
 
   def patch(patch: GoodsItemPatch)(implicit hc: HeaderCarrier): Future[Done] =
     httpClient

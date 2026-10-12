@@ -21,15 +21,15 @@ import play.api.libs.json.{Json, OFormat}
 import java.time.Instant
 
 final case class GoodsItemPatchRequest(
-                                        adviceStatus: Option[AdviceStatus],
-                                        version: Option[Int],
-                                        active: Option[Boolean],
-                                        locked: Option[Boolean],
-                                        toReview: Option[Boolean],
-                                        declarable: Option[Declarable],
-                                        reviewReason: Option[ReviewReason],
-                                        updatedDateTime: Option[Instant]
-                                      )
+  adviceStatus: Option[AdviceStatus],
+  version: Option[Int],
+  active: Option[Boolean],
+  locked: Option[Boolean],
+  toReview: Option[Boolean],
+  declarable: Option[Declarable],
+  reviewReason: Option[ReviewReason],
+  updatedDateTime: Option[Instant]
+)
 
 object GoodsItemPatchRequest {
 

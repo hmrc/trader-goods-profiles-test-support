@@ -19,7 +19,6 @@ package uk.gov.hmrc.tradergoodsprofilestestsupport.controllers.actions
 import play.api.mvc.{Request, WrappedRequest}
 
 final case class AuthenticatedRequest[A](
-                                          request: Request[A],
-                                          eori: String
-                                        ) extends WrappedRequest[A](request)
-
+  request: Request[A],
+  eori: String
+) extends WrappedRequest[A](request)

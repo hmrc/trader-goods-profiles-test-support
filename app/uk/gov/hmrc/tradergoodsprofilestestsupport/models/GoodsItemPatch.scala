@@ -21,17 +21,17 @@ import play.api.libs.json.{Json, OFormat}
 import java.time.Instant
 
 final case class GoodsItemPatch(
-                                 eori: String,
-                                 recordId: String,
-                                 accreditationStatus: Option[AccreditationStatus],
-                                 version: Option[Int],
-                                 active: Option[Boolean],
-                                 locked: Option[Boolean],
-                                 toReview: Option[Boolean],
-                                 declarable: Option[Declarable],
-                                 reviewReason: Option[ReviewReason],
-                                 updatedDateTime: Option[Instant]
-                               )
+  eori: String,
+  recordId: String,
+  accreditationStatus: Option[AccreditationStatus],
+  version: Option[Int],
+  active: Option[Boolean],
+  locked: Option[Boolean],
+  toReview: Option[Boolean],
+  declarable: Option[Declarable],
+  reviewReason: Option[ReviewReason],
+  updatedDateTime: Option[Instant]
+)
 
 object GoodsItemPatch {
 
@@ -51,10 +51,10 @@ object GoodsItemPatch {
 
   private def translateAdviceStatus(adviceStatus: AdviceStatus): AccreditationStatus =
     adviceStatus match {
-      case AdviceStatus.AdviceProvided => AccreditationStatus.Approved
-      case AdviceStatus.AdviceNotProvided => AccreditationStatus.Rejected
+      case AdviceStatus.AdviceProvided         => AccreditationStatus.Approved
+      case AdviceStatus.AdviceNotProvided      => AccreditationStatus.Rejected
       case AdviceStatus.AdviceRequestWithdrawn => AccreditationStatus.Withdrawn
-      case _                            => AccreditationStatus.withName(adviceStatus.entryName)
+      case _                                   => AccreditationStatus.withName(adviceStatus.entryName)
     }
 
   implicit lazy val format: OFormat[GoodsItemPatch] = Json.format

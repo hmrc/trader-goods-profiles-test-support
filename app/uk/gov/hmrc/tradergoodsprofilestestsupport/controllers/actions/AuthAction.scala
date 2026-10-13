@@ -26,13 +26,13 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AuthAction @Inject()(
-                            val authConnector: AuthConnector,
-                            val parser: BodyParsers.Default
-                          )(implicit val executionContext: ExecutionContext)
-extends ActionBuilder[AuthenticatedRequest, AnyContent]
-  with ActionFunction[Request, AuthenticatedRequest]
-  with AuthorisedFunctions {
+class AuthAction @Inject() (
+  val authConnector: AuthConnector,
+  val parser: BodyParsers.Default
+)(implicit val executionContext: ExecutionContext)
+    extends ActionBuilder[AuthenticatedRequest, AnyContent]
+    with ActionFunction[Request, AuthenticatedRequest]
+    with AuthorisedFunctions {
 
   override def invokeBlock[A](request: Request[A], block: AuthenticatedRequest[A] => Future[Result]): Future[Result] = {
 
@@ -42,8 +42,8 @@ extends ActionBuilder[AuthenticatedRequest, AnyContent]
     val identifierKey = "EORINumber"
 
     authorised((AffinityGroup.Individual or AffinityGroup.Organisation) and Enrolment(enrolmentKey))
-      .retrieve(Retrievals.authorisedEnrolments) {
-        enrolments => {
+      .retrieve(Retrievals.authorisedEnrolments) { enrolments =>
+        {
           for {
             enrolment <- enrolments.getEnrolment(enrolmentKey)
             eori      <- enrolment.getIdentifier(identifierKey)

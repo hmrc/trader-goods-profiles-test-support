@@ -36,20 +36,22 @@ class AuthActionSpec extends AnyFreeSpec with Matchers {
 
   "Auth Action" - {
 
-    val app = GuiceApplicationBuilder().build()
+    val app         = GuiceApplicationBuilder().build()
     val bodyParsers = app.injector.instanceOf[BodyParsers.Default]
 
     val eori = "some eori"
 
     "must process the request when the user has the correct enrolment with an eori" in {
 
-      val validEnrolments = Enrolments(Set(
-        Enrolment(
-          key = "HMRC-CUS-ORG",
-          identifiers = Seq(EnrolmentIdentifier("EORINumber", eori)),
-          state = "activated"
+      val validEnrolments = Enrolments(
+        Set(
+          Enrolment(
+            key = "HMRC-CUS-ORG",
+            identifiers = Seq(EnrolmentIdentifier("EORINumber", eori)),
+            state = "activated"
+          )
         )
-      ))
+      )
 
       val action = new AuthAction(new FakeAuthConnector(validEnrolments), bodyParsers)
 
@@ -63,13 +65,15 @@ class AuthActionSpec extends AnyFreeSpec with Matchers {
 
     "must return Forbidden when the user does not have the correct enrolment" in {
 
-      val invalidEnrolments = Enrolments(Set(
-        Enrolment(
-          key = "ANOTHER-ENROLMENT",
-          identifiers = Seq(EnrolmentIdentifier("EORINumber", eori)),
-          state = "activated"
+      val invalidEnrolments = Enrolments(
+        Set(
+          Enrolment(
+            key = "ANOTHER-ENROLMENT",
+            identifiers = Seq(EnrolmentIdentifier("EORINumber", eori)),
+            state = "activated"
+          )
         )
-      ))
+      )
 
       val action = new AuthAction(new FakeAuthConnector(invalidEnrolments), bodyParsers)
 
@@ -82,7 +86,10 @@ class AuthActionSpec extends AnyFreeSpec with Matchers {
   }
 
   class FakeAuthConnector[T](value: T) extends AuthConnector {
-    override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[A] =
+    override def authorise[A](predicate: Predicate, retrieval: Retrieval[A])(implicit
+      hc: HeaderCarrier,
+      ec: ExecutionContext
+    ): Future[A] =
       Future.fromTry(Try(value.asInstanceOf[A]))
   }
 }

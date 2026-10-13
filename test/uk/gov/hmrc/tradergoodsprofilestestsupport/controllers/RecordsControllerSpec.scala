@@ -52,10 +52,10 @@ class RecordsControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar 
         when(mockConnector.patch(any())(any())).thenReturn(Future.successful(Done))
 
         val payload = Json.obj(
-          "active" -> false,
-          "version" -> 123,
+          "active"       -> false,
+          "version"      -> 123,
           "adviceStatus" -> "Advice Provided",
-          "declarable" -> "Not Ready For IMMI"
+          "declarable"   -> "Not Ready For IMMI"
         )
 
         val expectedPatch = GoodsItemPatch(
@@ -99,10 +99,10 @@ class RecordsControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar 
         when(mockConnector.patch(any())(any())).thenReturn(Future.successful(Done))
 
         val payload = Json.obj(
-          "active" -> false,
-          "version" -> 123,
+          "active"       -> false,
+          "version"      -> 123,
           "adviceStatus" -> "Advice request withdrawn",
-          "declarable" -> "Not Ready For IMMI"
+          "declarable"   -> "Not Ready For IMMI"
         )
 
         val expectedPatch = GoodsItemPatch(
@@ -146,10 +146,10 @@ class RecordsControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar 
         when(mockConnector.patch(any())(any())).thenReturn(Future.successful(Done))
 
         val payload = Json.obj(
-          "active" -> false,
-          "version" -> 123,
+          "active"       -> false,
+          "version"      -> 123,
           "adviceStatus" -> "Advice request withdrawn",
-          "declarable" -> "Not Ready For IMMI",
+          "declarable"   -> "Not Ready For IMMI",
           "reviewReason" -> "commodity"
         )
 
@@ -195,7 +195,7 @@ class RecordsControllerSpec extends AnyFreeSpec with Matchers with MockitoSugar 
         val mockConnector = mock[RecordsConnector]
 
         val payload = Json.obj(
-          "active" -> false,
+          "active"  -> false,
           "version" -> 123
         )
 

@@ -3,4 +3,5 @@ description: Public facing API to aid testing of the Trader Goods Profiles API. 
 repoVisibility: public_0C3F0CE3E6E6448FAD341E7BFA50FCD333E06A20CFF05FCACE61154DDBBADF71
 type: service
 service-type: backend
+serviceNowMapping: SNSVC0020309
 tags: ['api']
